@@ -1,22 +1,33 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/Account/Login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/Account/Error',
+    name: 'error',
+    component: () => import('../views/ErrorView.vue')
+  },
+  {
+    path: '/Account/Password/Reset/Confirmed',
+    name: 'resetPasswordConfirmed',
+    component: () => import('../views/ResetPasswordConfirmedView.vue')
+  },
+  {
+    path: '/Account/Locked',
+    name: 'accountLocked',
+    component: () => import('../views/LockedAccountView.vue')
+  },
+  {
+    path: '/Account/Email/Confirmed',
+    name: 'emailConfirmed',
+    component: () => import('../views/EmailConfirmedView.vue')
   }
 ]
 
