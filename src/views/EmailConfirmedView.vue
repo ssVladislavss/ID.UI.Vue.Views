@@ -14,9 +14,6 @@ import IDBaseComponent from '@/components/base/id-base-component';
 /* eslint-disable */
 
 export default class EmailConfirmedView extends IDBaseComponent {
-    created(): void {
-        console.log('ggg');
-    }
 }
 
 </script>
