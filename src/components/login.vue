@@ -27,7 +27,8 @@
             </v-window-item>
             <v-window-item :value="2">
                 <v-fab-transition>
-                    <v-btn color="primary" fab text small top left @click="() => { WindowStep = 1; UserName = ''; }" :disabled="Loading">
+                    <v-btn color="primary" fab text small top left @click="() => { WindowStep = 1; UserName = ''; }"
+                        :disabled="Loading">
                         <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
                 </v-fab-transition>
@@ -37,8 +38,8 @@
                         persistent-hint />
                 </v-form>
                 <v-card-actions>
-                    <v-btn block color="primary" :disabled="!ResetPasswordForm" :loading="Loading" @click="ResetPasswordAsync"
-                        large text>Сбросить пароль</v-btn>
+                    <v-btn block color="primary" :disabled="!ResetPasswordForm" :loading="Loading"
+                        @click="ResetPasswordAsync" large text>Сбросить пароль</v-btn>
                 </v-card-actions>
             </v-window-item>
         </v-window>
@@ -77,7 +78,16 @@ export default class LoginComponent extends IDBaseComponent {
         this.Loading = true;
 
         try {
-            const sendResult = await fetch(`https://localhost:44338/api/account/${this.UserName}/password/reset?clientId=${this.$route.query.client_id}`, {
+            const splitted = this.returnUrl?.split('&');
+
+            let client_id = '';
+
+            if (splitted != undefined && splitted != null)
+                for (let item of splitted)
+                    if (item.includes('client_id'))
+                        client_id = item.split('=')[1];
+
+            const sendResult = await fetch(`https://localhost:44338/api/account/${this.UserName}/password/reset?clientId=${client_id}`, {
                 method: "PUT",
                 headers: {
                     'Accept': 'text/plain',
@@ -104,7 +114,6 @@ export default class LoginComponent extends IDBaseComponent {
         let returnParam = '';
 
         for (let param in this.$route.query) {
-            console.log(`${param} - ${this.$route.query[param]}`);
             if (param != 'ReturnUrl')
                 returnParam += `&${param}=${this.$route.query[param]}`;
         }
