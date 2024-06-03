@@ -10,6 +10,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/LoginView.vue')
   },
   {
+    path: '/Account/TwoFactor',
+    name: 'TwoFactor',
+    component: () => import('../views/TwoFactor.vue')
+  },
+  {
     path: '/Account/Error',
     name: 'error',
     component: () => import('../views/ErrorView.vue')

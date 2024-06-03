@@ -18,6 +18,10 @@ export default class IDBaseComponent extends Vue {
             (value: string) => value ? true : "Требуется заполнить",
 
         ],
+        TwoFactorCode: [
+            (v: string) => !!v || 'Введите код',
+            (v: string) => v.length > 6 || 'Длина кода должна быть 6 символовов'
+        ]
     }
 
     get Loading(): boolean {
