@@ -36,7 +36,7 @@ export default class TwoFactorComponent extends IDBaseComponent {
     TwoFactorCode = '';
     TwoFactorForm = false;
 
-    ResendTick = 5;
+    ResendTick = 300;
     IntervalActive = false;
     Interval = 0;
 
@@ -119,7 +119,7 @@ export default class TwoFactorComponent extends IDBaseComponent {
             });
 
             if (resendResult.status == 200) {
-                this.ResendTick = 5;
+                this.ResendTick = 300;
                 this.toggleTimer();
             }
         } catch (e) {
