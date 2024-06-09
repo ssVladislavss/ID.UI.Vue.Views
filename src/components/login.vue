@@ -87,7 +87,7 @@ export default class LoginComponent extends IDBaseComponent {
                     if (item.includes('client_id'))
                         client_id = item.split('=')[1];
 
-            const sendResult = await fetch(`https://localhost:44338/api/account/${this.UserName}/password/reset`, {
+            const sendResult = await fetch(`${location.origin}/api/account/${this.UserName}/password/reset`, {
                 method: "PUT",
                 headers: {
                     'Accept': 'text/plain',
@@ -119,7 +119,7 @@ export default class LoginComponent extends IDBaseComponent {
         }
 
         try {
-            const sendResult = await fetch(`https://localhost:44338/api/account/login`, {
+            const sendResult = await fetch(`${location.origin}/api/account/login`, {
                 method: "POST",
                 headers: {
                     'Accept': 'text/plain',
