@@ -33,6 +33,11 @@ const routes: Array<RouteConfig> = [
     path: '/Account/Email/Confirmed',
     name: 'emailConfirmed',
     component: () => import('../views/EmailConfirmedView.vue')
+  },
+  {
+    path: '/Account/Email/Confirm/Expired',
+    name: 'emailConfirmExpired',
+    component: () => import('../views/EmailConfirmedView.vue')
   }
 ]
 
