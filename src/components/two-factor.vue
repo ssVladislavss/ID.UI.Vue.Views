@@ -1,25 +1,30 @@
 <template>
-    <v-container style="width: 100%;height: 100%;position: fixed;max-width: 600px;
+    <div>
+        <v-container style="width: 100%;height: 100%;position: fixed;max-width: 600px;
                         left: 50%;margin-right: -50%;display: flex;
                         justify-content: center;overflow: auto;
                         flex-direction: column;transform: translate(-50%, 0)">
-        <v-fab-transition>
-            <v-btn color="primary" :href="GoToLoginHref" fab text small top left :disabled="Loading">
-                <v-icon>mdi-arrow-left</v-icon>
-            </v-btn>
-        </v-fab-transition>
-        <p class="text-h6 text-center">Мы отправили код на выбранный Вами способ подтверждения</p>
-        <v-form v-model="TwoFactorForm">
-            <v-otp-input v-model="OTP" :length="6" :disabled="Loading" @finish="OnFinish" type="number"></v-otp-input>
-            <p class="text-caption text-center">Введите значение</p>
-            <p v-if="ResendTick > 0" class="text-caption text-center">Переотправить код можно через {{ ResendTick }}
-                сек.</p>
-            <v-btn v-else @click="OnResend" text block small>Отправить повторно</v-btn>
-            <v-overlay absolute :value="Loading">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
-            </v-overlay>
-        </v-form>
-    </v-container>
+            <v-fab-transition>
+                <v-btn color="primary" :href="GoToLoginHref" fab text small top left :disabled="Loading">
+                    <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
+            </v-fab-transition>
+            <p class="text-h6 text-center">Мы отправили код на выбранный Вами способ подтверждения</p>
+            <v-form v-model="TwoFactorForm">
+                <v-otp-input v-model="OTP" :length="6" :disabled="Loading" @finish="OnFinish"
+                    type="number"></v-otp-input>
+                <p class="text-caption text-center">Введите значение</p>
+                <p v-if="ResendTick > 0" class="text-caption text-center">Переотправить код можно через {{ ResendTick }}
+                    сек.</p>
+                <v-btn v-else @click="OnResend" text block small>Отправить повторно</v-btn>
+            </v-form>
+        </v-container>
+
+        <v-overlay absolute :value="Loading">
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </v-overlay>
+    </div>
+
 </template>
 
 <script lang="ts">
@@ -96,11 +101,18 @@ export default class TwoFactorComponent extends IDBaseComponent {
                 body: JSON.stringify({ UserName: this.userName, TwoFactorCode: rsp, ReturnUrl: `${this.returnUrl}${returnParam}` })
             });
 
+            if (sendResult.status != 200) {
+                this.TwoFactorCode = '';
+
+                return;
+            }
+
             const urlRedirect = await sendResult.text();
 
             location.replace(`${location.origin}${urlRedirect}`);
         } catch (e) {
             console.error(e);
+            this.TwoFactorCode = '';
         } finally {
             this.Loading = false;
         }
