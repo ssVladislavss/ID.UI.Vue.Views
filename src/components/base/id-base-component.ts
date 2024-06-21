@@ -4,7 +4,7 @@ import ComponentVue from 'vue-class-component';
 
 @ComponentVue
 export default class IDBaseComponent extends Vue {
-    private loading = false;
+    Loading = false;
 
     SignInRules = {
         Email: [
@@ -22,12 +22,5 @@ export default class IDBaseComponent extends Vue {
             (v: string) => !!v || 'Введите код',
             (v: string) => v.length > 6 || 'Длина кода должна быть 6 символовов'
         ]
-    }
-
-    get Loading(): boolean {
-        return this.loading;
-    }
-    set Loading(value: boolean) {
-        this.loading = value;
     }
 }
