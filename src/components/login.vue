@@ -45,7 +45,7 @@
                             hint="На  указанный адрес мы отправим инструкцию для сброса пароля" persistent-hint />
 
                         <template v-if="Captcha != null && Captcha != undefined">
-                            <v-img :src="Captcha.Path" />
+                            <v-img :src="Captcha.path" />
                             <v-text-field autofocus label="Введите код с картинки" v-model="CaptchaInput"
                                 :disabled="SignInLoading" hint="Защита от роботов" persistent-hint />
                         </template>
@@ -86,9 +86,9 @@ export default class LoginComponent extends IDBaseComponent {
     ResetPasswordForm = false;
     // eslint-disable-next-line
     Captcha = {
-        Path: '',
-        Hash: 0,
-        Captcha: ''
+        path: '',
+        hash: 0,
+        captcha: ''
     };
 
     Items = [
@@ -153,7 +153,7 @@ export default class LoginComponent extends IDBaseComponent {
                     'Accept': 'text/plain',
                     'Content-Type': 'text/json;+charset=utf-8'
                 },
-                body: JSON.stringify({ Email: this.UserName, CaptchaId: this.Captcha.Hash, Captcha: this.CaptchaInput })
+                body: JSON.stringify({ Email: this.UserName, CaptchaId: this.Captcha.hash, Captcha: this.CaptchaInput })
             });
 
             const result = await sendResult.json();
@@ -233,7 +233,7 @@ export default class LoginComponent extends IDBaseComponent {
 
         const captchaJson = await result.json();
 
-        this.Captcha = captchaJson.Data;
+        this.Captcha = captchaJson.data;
 
         console.log(this.Captcha);
     }
