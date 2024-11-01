@@ -43,6 +43,12 @@
                         <v-text-field autofocus label="Электронный адрес" v-model="UserName" :rules="SignInRules.Email"
                             :disabled="SignInLoading"
                             hint="На  указанный адрес мы отправим инструкцию для сброса пароля" persistent-hint />
+
+                        <template v-if="Captcha != null && Captcha != undefined">
+                            <v-img :src="Captcha.Path" />
+                            <v-text-field autofocus label="Введите код с картинки" v-model="CaptchaInput"
+                                :disabled="SignInLoading" hint="Защита от роботов" persistent-hint />
+                        </template>
                     </v-form>
                     <v-card-actions>
                         <v-btn block color="primary" :disabled="!ResetPasswordForm" :loading="SignInLoading"
@@ -72,11 +78,18 @@ export default class LoginComponent extends IDBaseComponent {
 
     UserName = '';
     Password = '';
+    CaptchaInput = '';
     PasswordVisible = false;
     RememberMe = false;
 
     SignInForm = false;
     ResetPasswordForm = false;
+    // eslint-disable-next-line
+    Captcha = {
+        Path: '',
+        Hash: 0,
+        Captcha: ''
+    };
 
     Items = [
         {
@@ -127,18 +140,20 @@ export default class LoginComponent extends IDBaseComponent {
 
     async mounted(): Promise<void> {
         await this.LoadValidAuthProvidersAsync();
+        await this.LoadCaptchaAsync();
     }
 
     async ResetPasswordAsync(): Promise<void> {
         this.Loading = true;
 
         try {
-            const sendResult = await fetch(`${location.origin}/api/account/${this.UserName}/password/reset`, {
+            const sendResult = await fetch(`${location.origin}/api/account/password/reset`, {
                 method: "PUT",
                 headers: {
                     'Accept': 'text/plain',
                     'Content-Type': 'text/json;+charset=utf-8'
                 },
+                body: JSON.stringify({ Email: this.UserName, CaptchaId: this.Captcha.Hash, Captcha: this.CaptchaInput })
             });
 
             const result = await sendResult.json();
@@ -207,6 +222,20 @@ export default class LoginComponent extends IDBaseComponent {
         }
 
         this.Loading = false;
+    }
+
+    async LoadCaptchaAsync() {
+        const result = await fetch(`${location.origin}/api/captcha/make`);
+
+        if (!result.ok) {
+            return;
+        }
+
+        const captchaJson = await result.json();
+
+        this.Captcha = captchaJson.Data;
+
+        console.log(this.Captcha);
     }
 }
 </script>
